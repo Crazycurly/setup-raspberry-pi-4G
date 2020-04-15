@@ -55,7 +55,10 @@ cat <<'EOF' | sudo tee /etc/udev/rules.d/99-dwm222.rules
 KERNEL=="ttyUSB1", ATTRS{idVendor}=="2001", ATTRS{idProduct}=="7e35", ENV{SYSTEMD_WANTS}+="ifup@4gppp0.service"
 EOF
 sudo udevadm control --reload
-curl -s 'https://raw.githubusercontent.com/zerotier/ZeroTierOne/master/doc/contact%40zerotier.com.gpg' | gpg --import && \
-if z=$(curl -s 'https://install.zerotier.com/' | gpg); then echo "$z" | sudo bash; fi
-sudo zerotier-cli join $1
+if [ -z "$1" ]
+then
+    curl -s 'https://raw.githubusercontent.com/zerotier/ZeroTierOne/master/doc/contact%40zerotier.com.gpg' | gpg --import && \
+    if z=$(curl -s 'https://install.zerotier.com/' | gpg); then echo "$z" | sudo bash; fi
+    sudo zerotier-cli join $1
+fi
 sudo reboot
